@@ -1,10 +1,13 @@
 package web.dao;
 
+
+
+import org.hibernate.Session;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Component;
+import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import web.model.User;
 
 import java.util.List;
@@ -15,18 +18,19 @@ public class UserDAOImpl implements UserDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-
     @Override
-    @Transactional
-    public List<User> getAllUsers() {
-        return entityManager.createQuery("SELECT user FROM User user", User.class).getResultList();
+    public List<User> getUserList() {
+        Session session = entityManager.unwrap(Session.class);
+        Query query = (Query) session.createQuery("from User", User.class);
+        List<User> allUsers = query.getResultList();
+        return allUsers;
     }
 
-    @Override
-    @Transactional
-    public User getByIdUser(int id) {
-        return entityManager.find(User.class, id);
-    }
+//    @Override
+//    @Transactional
+//    public List<User> getUserList() {
+//        return entityManager.createQuery("select  user from  User  user", User.class).getResultList();
+//    }
 
     @Override
     @Transactional
@@ -40,12 +44,18 @@ public class UserDAOImpl implements UserDAO {
         entityManager.merge(user);
     }
 
+    @Override
+    public User getUserById(int id) {
+        return entityManager.createQuery("select user from User user where user.id = :id", User.class)
+                .setParameter("id",id).getSingleResult();
+    }
 
     @Override
     @Transactional
     public void deleteUser(int id) {
-       entityManager.createQuery("delete from user where id = :id")
-               .setParameter("id", id)
-               .executeUpdate();
+//        entityManager.createQuery("delete from User where id = :id").setParameter("id", id).executeUpdate();
+          entityManager.remove(entityManager.find(User.class,id));
     }
+
+
 }

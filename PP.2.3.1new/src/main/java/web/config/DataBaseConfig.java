@@ -1,5 +1,6 @@
 package web.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +22,11 @@ import java.util.Properties;
 @ComponentScan(value = "web")
 public class DataBaseConfig {
 
-
+    @Autowired
     private Environment environment;
+
+    @Autowired
+    DataSource dataSource;
 
     @Bean
     public DataSource getDataSource() {
@@ -37,7 +41,7 @@ public class DataBaseConfig {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(getDataSource());
+        em.setDataSource(dataSource);
         em.setPackagesToScan(environment.getRequiredProperty("db.entity.package"));
         em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         em.setJpaProperties(getHibernateProperties());

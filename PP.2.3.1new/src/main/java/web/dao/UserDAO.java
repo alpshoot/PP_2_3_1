@@ -1,19 +1,21 @@
 package web.dao;
 
-import org.springframework.transaction.annotation.Transactional;
+
 import web.model.User;
 
 import java.util.List;
 
 public interface UserDAO {
 
-    List<User> getAllUsers();
+    public List<User> getUserList();
+//    User show(int id);
 
-    User getByIdUser(int id);
+    public void saveUser(User user);
 
-    void saveUser(User user);
+    public void updateUser(User user);
 
-    void updateUser(User user);
+    public User getUserById(int id);
 
-    void deleteUser(int id);
+    public void deleteUser(int id);
+
 }

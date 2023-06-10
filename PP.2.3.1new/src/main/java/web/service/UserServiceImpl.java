@@ -1,5 +1,6 @@
 package web.service;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import web.dao.UserDAO;
@@ -13,15 +14,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDAO userDAO;
 
-
-    @Override
-    public User getByIdUser(int id) {
-        return userDAO.getByIdUser(id);
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userDAO.getAllUsers();
+    public List<User> getListFromService() {
+        return userDAO.getUserList();
     }
 
     @Override
@@ -30,7 +24,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user) {
+    public User getUserById(int id) {
+        return userDAO.getUserById(id);
+    }
+
+    @Override
+    public void updateUser(User user) {
         userDAO.updateUser(user);
     }
 
